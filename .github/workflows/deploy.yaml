@@ -7,7 +7,7 @@ on:
 
 env:
  AZURE_WEBAPP_NAME: 'AppSvcGitAct' #appservicename
- DOTNET_VERSION: '8.0'
+ DOTNET_VERSION: '8.0.x'
 
 jobs:
   build-and-deploy:
@@ -20,15 +20,15 @@ jobs:
         with:
           dotnet-version: ${{env.DOTNET_VERSION}}
       - name: Restore dependencies
-        run: dotnet restore Az204AppService
+        run: dotnet restore Az204AppService/Az204AppService.sln
       - name: build
-        run: dotnet build Az204AppService --configuration Release --no-restore #build with prod config and norestore depncies as alrdy done
+        run: dotnet build Az204AppService/Az204AppService.sln --configuration Release --no-restore #build with prod config and norestore depncies as alrdy done
       - name: Publish
-        run: dotnet publish Az204AppService -c Release -o ./publish_output #compiled bin, config, stat file all put in that path
+        run: dotnet publish Az204AppService/Az204AppService.sln -c Release -o ./publish_output #compiled bin, config, stat file all put in that path
       - name: Deploy to azure web app
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'AppSvcGitAct'
           publish-profile: ${{secrets.AZURE_WEBAPP_PUBLISH_PROFILE}}
-          package: ./publish_output
+          package: './publish_output'
       

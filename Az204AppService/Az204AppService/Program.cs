@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddFile("Logs/startup.log");
-Console.WriteLine($"Running in environment: {builder.Environment.EnvironmentName}");
+//Console.WriteLine($"Running in environment: {builder.Environment.EnvironmentName}");
 
 // Add services to the container.
 

@@ -1,6 +1,22 @@
+using Azure.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+if(builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+else
+{
+    string? kvUri = builder.Configuration["KeyVaultUri"];
+    if (!string.IsNullOrEmpty(kvUri))
+    {
+        var azureServiceTokenProvider = new DefaultAzureCredential();
+        builder.Configuration.AddAzureKeyVault(new Uri(kvUri), azureServiceTokenProvider);
+    }
+}
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

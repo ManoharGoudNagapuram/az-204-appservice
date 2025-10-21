@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Az204AppService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -12,13 +12,15 @@ namespace Az204AppService.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly IConfiguration _config;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet("weather-forecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -28,6 +30,14 @@ namespace Az204AppService.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("config-value")]
+        public string GetConfigValue()
+        {
+            var kvValue = _config["myname"];
+
+            return kvValue ?? "Key not found";
         }
     }
 }

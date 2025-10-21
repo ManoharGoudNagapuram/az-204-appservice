@@ -2,11 +2,11 @@ name: Deploy .net 8 web api to appservice
 on:
  push: 
    branches: 
-    - main
+    - feature/az-keyvault-dev
  workflow_dispatch:
 
 env:
- AZURE_WEBAPP_NAME: 'AppSvcGitAct' #appservicename
+ AZURE_WEBAPP_NAME: mywebapi-kv-appsvc #appservicename
  DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: Deploy to azure web app
         uses: azure/webapps-deploy@v3
         with:
-          app-name: AppSvcGitAct
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: './publish_output'
       
